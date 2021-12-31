@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+
+<script>
+var sse = new EventSource("http://localhost:8081/sub/test_____", {
+	withCredentials: true
+});
+
+var first = true;
+sse.onopen = function() {
+	console.log('channel opened');
+	console.time('delay');
+};
+
+sse.onerror = function(e) {
+	console.log('error', e, sse);
+};
+
+sse.onmessage = function(e) {
+	console.log('message received');
+	if (first) {
+		console.timeEnd('delay');
+		first = false;
+		console.time('messageGap');
+	}
+	else {
+		console.timeEnd('messageGap');
+		console.time('messageGap');
+	}
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+version: '3'
+
+networks:
+  backend:
+    driver: bridge
+
+services:
+
+  nginx:
+    container_name: nginx-es-test
+    build:
+      context: ./nginx
+      args:
+        - PUID=1111
+        - PGID=1111
+        - TZ=Europe/Kiev
+        - http_proxy
+        - https_proxy
+        - no_proxy
+    sysctls:
+      - net.core.somaxconn=65535
+      - net.ipv4.ip_nonlocal_bind=1
+    ports:
+      - "8080:80"
+      - "8081:81"
+    networks:
+      - backend
